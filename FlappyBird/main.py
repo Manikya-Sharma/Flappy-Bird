@@ -14,9 +14,9 @@ class Game:
         # TODO Add make defaults in settings panel of initialize screen
         self.s = Settings()
         try:
-            file = open('data.txt', 'r+')
+            file = open('../data/data.txt', 'r+')
         except FileNotFoundError:
-            file = open('data.txt', 'w+')
+            file = open('../data/data.txt', 'w+')
             file.write('0')
             file.seek(0)
 

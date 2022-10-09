@@ -9,7 +9,7 @@ class Defaults:
 class Settings:
     @staticmethod
     def get_settings():
-        with open('settings.csv', 'r') as f:
+        with open('../data/settings.csv', 'r') as f:
             data = f.read()
             dic = Settings.get_data_dic(data)
         return dic
@@ -37,5 +37,5 @@ class Settings:
         for key, value in dic.items():
             string += (str(key).strip() + ":" + str(value).strip() + ",")
 
-        with open('settings.csv', 'w') as f:
+        with open('../data/settings.csv', 'w') as f:
             f.write(string)
