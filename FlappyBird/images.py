@@ -99,5 +99,6 @@ class Images:
                     val, (int(self.data["SCREEN_WIDTH"]), int(self.data["SCREEN_HEIGHT"])))
             else:
                 new_val = pygame.transform.scale2x(val)
+            new_val.set_colorkey((0,0,0))
             new_dic[key] = new_val
         return new_dic

@@ -3,7 +3,11 @@ class Defaults:
         {
             "SCREEN_WIDTH": 400,
             "SCREEN_HEIGHT": 600,
-            "TIME" : "day"
+            "TIME" : "day",
+            "X_SPEED" : 120,
+            "COLOR" : "yellow",
+            "GRAVITY" : 10,
+            "JUMP_INTENSITY" : 30
         }
 
 
