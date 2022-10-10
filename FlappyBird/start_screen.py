@@ -15,4 +15,5 @@ class Start:
 
     def play(self):
         print("PLAYING START SCREEN")
-        return self.keep_running
+        return False
+        # return self.keep_running
