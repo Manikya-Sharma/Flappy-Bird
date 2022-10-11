@@ -7,7 +7,9 @@ class Defaults:
             "X_SPEED" : 120,
             "COLOR" : "yellow",
             "GRAVITY" : 250,
-            "JUMP_INTENSITY" : 200
+            "JUMP_INTENSITY" : 200,
+            "ROTATION" : 25,
+            "ROTATION_SPEED":45
         }
 
 

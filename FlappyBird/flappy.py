@@ -10,6 +10,8 @@ class Defaults:
         self.color = self.data["COLOR"]
         self.gravity = self.data["GRAVITY"]
         self.jump_intensity = self.data["JUMP_INTENSITY"]
+        self.rotation = self.data["ROTATION"]
+        self.rotation_speed = self.data["ROTATION_SPEED"]
 
     def get_speed(self):
         return float(self.speed)
@@ -23,16 +25,31 @@ class Defaults:
     def get_jump_intensity(self):
         return float(self.jump_intensity)
 
+    def get_rotation(self):
+        return float(self.rotation)
+
+    def get_rotation_speed(self):
+        return float(self.rotation_speed)
+
 class Flappy:
     d = Defaults()
     def __init__(self, pos_x, pos_y, color=d.get_color(), x_speed = d.get_speed(),
                  initially_moving = False, gravity = d.get_gravity(),
+                 initial_rotation = d.get_rotation(),
+                 rotation_speed = d.get_rotation_speed(),
                  init_status="idle", init_vel_y = 0):
         # Images
         self.blue_image = Images().get_flappy_blue_images()
         self.red_image = Images().get_flappy_red_images()
         self.yellow_image = Images().get_flappy_yellow_images()
         self.color = color
+        if color == "yellow":
+            self.images = self.yellow_image
+        elif color == "red":
+            self.images = self.red_image
+        elif color == "blue":
+            self.images = self.blue_image
+
         self.screen = pygame.display.get_surface()
 
         # Position
@@ -53,8 +70,14 @@ class Flappy:
 
         self.ignore_timer = Timer() # To prevent excess jump
 
+        # Rotation
+        self.initial_rotation =initial_rotation
+        self.rotation = self.initial_rotation
+        self.rotation_speed = rotation_speed
+
         # Status
         self.status = init_status
+        self.image = self.images[self.status]
 
         # Offset
         # Default position x of bird = width/3
@@ -63,10 +86,7 @@ class Flappy:
 
 
     def draw(self):
-        self.screen.blit(self.yellow_image[self.status], (self.offset_x, self.pos_y))
-
-    def change_bg_images(self):
-        pass
+        self.screen.blit(self.image, (self.offset_x, self.pos_y))
 
     def update_status(self):
         # up/down
@@ -77,13 +97,21 @@ class Flappy:
         else:
             self.status = "idle"
 
+        self.image = self.images[self.status]
+
     def update_fall(self, dt):
-        # make it fall
         jump_time = self.jump_timer.time_elapsed()
         self.pos_y = \
         self.init_pos_y + self.init_vel_y*jump_time+(1/2)*(self.gravity)*(jump_time**2)
-
         self.vel_y = self.init_vel_y+(self.gravity*jump_time)
+
+    def update_rotation(self, dt):
+        if self.rotation >= -40:
+            self.rotation -= self.rotation_speed*dt
+
+    def update_image_rotation(self):
+        self.image = pygame.transform.rotate(self.image, self.rotation)
+        pygame.display.get_surface().blit(self.image, (0,0))
 
     def move(self, dt):
         # move forward
@@ -101,19 +129,30 @@ class Flappy:
         self.is_moving = False
 
     def start_jumping(self):
+        # Jump
         self.jump_timer.restart()
         self.vel_y = self.jump_intensity
         self.init_pos_y = self.pos_y
         self.init_vel_y = self.vel_y
+        # Give flap effect
         self.status = 'idle'
+        self.image = self.images[self.status]
+
+        #Rotation
+        self.rotation = self.initial_rotation
+
+    def update(self, dt):
+        self.update_status()
+        self.update_image_rotation()
+        self.update_fall(dt)
+        self.update_rotation(dt)
 
     def play(self, dt):
         # integrate all methods
-        self.draw()
-        self.update_status()
-        self.update_fall(dt)
+        self.update(dt)
         self.start_moving() #TODO After pressing a key
         self.move(dt)
+        self.draw()
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
