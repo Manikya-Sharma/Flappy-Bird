@@ -34,12 +34,15 @@ class Flappy:
         self.yellow_image = Images().get_flappy_yellow_images()
         self.color = color
         self.screen = pygame.display.get_surface()
+
         # Position
         self.pos_x = pos_x
         self.pos_y = pos_y
+
         # X motion
         self.x_speed = x_speed
         self.is_moving = initially_moving
+
         # Y motion
         self.jump_timer = Timer()
         self.gravity = gravity
@@ -49,11 +52,21 @@ class Flappy:
         self.jump_intensity = -Defaults().get_jump_intensity()
 
         self.ignore_timer = Timer() # To prevent excess jump
+
         # Status
         self.status = init_status
 
+        # Offset
+        # Default position x of bird = width/3
+        # Bird draws on offset but position on pos_x
+        self.offset_x = self.screen.get_size()[0]/3
+
+
     def draw(self):
-        self.screen.blit(self.yellow_image[self.status], (self.pos_x, self.pos_y))
+        self.screen.blit(self.yellow_image[self.status], (self.offset_x, self.pos_y))
+
+    def change_bg_images(self):
+        pass
 
     def update_status(self):
         # up/down
@@ -88,7 +101,6 @@ class Flappy:
         self.is_moving = False
 
     def start_jumping(self):
-        print("HERE")
         self.jump_timer.restart()
         self.vel_y = self.jump_intensity
         self.init_pos_y = self.pos_y
@@ -104,7 +116,6 @@ class Flappy:
         self.move(dt)
 
         keys = pygame.key.get_pressed()
-        print(self.ignore_timer.time_elapsed())
         if keys[pygame.K_SPACE]:
             self.start_jumping()
             self.ignore_timer.restart()
