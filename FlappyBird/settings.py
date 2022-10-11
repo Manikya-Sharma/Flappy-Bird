@@ -6,8 +6,8 @@ class Defaults:
             "TIME" : "day",
             "X_SPEED" : 120,
             "COLOR" : "yellow",
-            "GRAVITY" : 10,
-            "JUMP_INTENSITY" : 30
+            "GRAVITY" : 250,
+            "JUMP_INTENSITY" : 200
         }
 
 

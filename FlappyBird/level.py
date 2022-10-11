@@ -18,4 +18,5 @@ class Level:
     def play(self, dt):
         self.blit()
         self.flappy.play(dt)
-        return True   # End
+        # print(self.flappy.pos_x, self.flappy.pos_y)
+        return True   # End by returning false

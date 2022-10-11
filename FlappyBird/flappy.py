@@ -27,7 +27,7 @@ class Flappy:
     d = Defaults()
     def __init__(self, pos_x, pos_y, color=d.get_color(), x_speed = d.get_speed(),
                  initially_moving = False, gravity = d.get_gravity(),
-                 init_status="idle", init_vel_y = -d.get_jump_intensity()):
+                 init_status="idle", init_vel_y = 0):
         # Images
         self.blue_image = Images().get_flappy_blue_images()
         self.red_image = Images().get_flappy_red_images()
@@ -46,6 +46,9 @@ class Flappy:
         self.vel_y = 0
         self.init_pos_y = pos_y
         self.init_vel_y = init_vel_y
+        self.jump_intensity = -Defaults().get_jump_intensity()
+
+        self.ignore_timer = Timer() # To prevent excess jump
         # Status
         self.status = init_status
 
@@ -64,8 +67,8 @@ class Flappy:
     def update_fall(self, dt):
         # make it fall
         jump_time = self.jump_timer.time_elapsed()
-        self.pos_y = self.init_pos_y +\
-             self.init_vel_y*jump_time+(1/2)*(self.gravity)*(jump_time**2)
+        self.pos_y = \
+        self.init_pos_y + self.init_vel_y*jump_time+(1/2)*(self.gravity)*(jump_time**2)
 
         self.vel_y = self.init_vel_y+(self.gravity*jump_time)
 
@@ -85,9 +88,12 @@ class Flappy:
         self.is_moving = False
 
     def start_jumping(self):
+        print("HERE")
         self.jump_timer.restart()
-        self.vel_y = self.init_vel_y
+        self.vel_y = self.jump_intensity
         self.init_pos_y = self.pos_y
+        self.init_vel_y = self.vel_y
+        self.status = 'idle'
 
     def play(self, dt):
         # integrate all methods
@@ -96,3 +102,9 @@ class Flappy:
         self.update_fall(dt)
         self.start_moving() #TODO After pressing a key
         self.move(dt)
+
+        keys = pygame.key.get_pressed()
+        print(self.ignore_timer.time_elapsed())
+        if keys[pygame.K_SPACE]:
+            self.start_jumping()
+            self.ignore_timer.restart()
