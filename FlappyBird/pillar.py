@@ -15,6 +15,9 @@ class Pillar:
     """Note that pillars are static but due to offset seem moving"""
     d = Defaults()
     pillars_list = []
+    pillars_max_list = []
+    # Will store max bound of pillar width for record of score
+
     def __init__(self, flappy_bound, color = d.get_color(), init_x = None):
         # Initialize
         self.screen = pygame.display.get_surface()
@@ -51,6 +54,7 @@ class Pillar:
         self.pos_2_y = self.gap_y+self.pillar_gap
 
         Pillar.pillars_list.append(self)
+        Pillar.pillars_max_list.append(self.pos_x+self.width)
 
     def update(self):
         self.offset_x = self.flappy_bound.offset_x

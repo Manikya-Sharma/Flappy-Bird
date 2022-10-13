@@ -126,7 +126,6 @@ class Flappy:
 
     def update_image_rotation(self):
         self.image = pygame.transform.rotate(self.image, self.rotation)
-        pygame.display.get_surface().blit(self.image, (0,0))
 
     def move(self, dt):
         # move forward

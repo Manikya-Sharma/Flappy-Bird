@@ -32,7 +32,7 @@ class Level:
         self.screen = pygame.display.get_surface()
         self.data = Settings.get_settings()
         # Flappy
-        self.flappy = Flappy(20, 200)
+        self.flappy = Flappy(self.screen.get_size()[0]*(1/10), self.screen.get_height()/2)
         # Background image
         self.image_provider = Images()
         bg_img_1 = self.image_provider.get_bg_images()[self.data["TIME"]]
@@ -41,13 +41,26 @@ class Level:
          self.flappy)
         # Pillars
         Pillar(self.flappy)
+        # Score
+        self.score = 0
+        self.num_images = self.image_provider.get_number_images()
 
         # Start Game TODO only after play button
         self.flappy.start_moving()
 
     def blit(self):
-        # back ground
+        # background
         self.handle_bg.draw(self.screen)
+        for letter in str(self.score):
+            self.screen.blit(self.num_images.get(letter), (0,0))
+
+    def update_score(self):
+        i = 0
+        for max_x in Pillar.pillars_max_list:
+            if (self.flappy.pos_x >= max_x):
+                i += 1
+        self.score = i
+
 
     def update(self):
         Pillar.update_pillars_creation\
@@ -55,13 +68,17 @@ class Level:
         if Pillar.check_collisions():
             self.flappy.die()
 
+        self.update_score()
+
     def play(self, dt):
+        # Update:-
         self.update()
         self.blit()
+        # Pillars:-
         for pillar in Pillar.pillars_list:
             pillar.play()
+        # Flappy:-
         self.flappy.play(dt)
         if self.flappy.is_alive:
             self.handle_bg.move(dt)
-        # print(self.flappy.pos_x, self.flappy.pos_y)
         return True   # End by returning false
