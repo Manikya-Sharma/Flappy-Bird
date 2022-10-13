@@ -34,10 +34,14 @@ class Defaults:
 class Flappy:
     d = Defaults()
     def __init__(self, pos_x, pos_y, color=d.get_color(), x_speed = d.get_speed(),
-                 initially_moving = False, gravity = d.get_gravity(),
+                 initially_moving = False, inhibit_jump = True,
+                 gravity = d.get_gravity(),
                  initial_rotation = d.get_rotation(),
                  rotation_speed = d.get_rotation_speed(),
                  init_status="idle", init_vel_y = 0):
+
+        self.is_alive = True
+
         # Images
         self.blue_image = Images().get_flappy_blue_images()
         self.red_image = Images().get_flappy_red_images()
@@ -59,6 +63,7 @@ class Flappy:
         # X motion
         self.x_speed = x_speed
         self.is_moving = initially_moving
+        self.inhibit_jump = inhibit_jump
 
         # Y motion
         self.jump_timer = Timer()
@@ -100,10 +105,20 @@ class Flappy:
         self.image = self.images[self.status]
 
     def update_fall(self, dt):
+        # Die
+        if self.pos_y+self.image.get_height() >= pygame.display.get_window_size()[1]:
+            self.gravity = 0
+            self.vel_y = 0
+            self.pos_y = pygame.display.get_window_size()[1]-self.image.get_height()
+            self.init_pos_y = self.pos_y
+            self.die()
+            return
+
         jump_time = self.jump_timer.time_elapsed()
         self.pos_y = \
         self.init_pos_y + self.init_vel_y*jump_time+(1/2)*(self.gravity)*(jump_time**2)
         self.vel_y = self.init_vel_y+(self.gravity*jump_time)
+
 
     def update_rotation(self, dt):
         if self.rotation >= -40:
@@ -125,22 +140,25 @@ class Flappy:
 
     def start_moving(self):
         self.is_moving = True
+        self.inhibit_jump = False
 
     def stop_moving(self):
         self.is_moving = False
+        self.inhibit_jump = True
 
     def start_jumping(self):
-        # Jump
-        self.jump_timer.restart()
-        self.vel_y = self.jump_intensity
-        self.init_pos_y = self.pos_y
-        self.init_vel_y = self.vel_y
-        # Give flap effect
-        self.status = 'idle'
-        self.image = self.images[self.status]
+        if not self.inhibit_jump:
+            # Jump
+            self.jump_timer.restart()
+            self.vel_y = self.jump_intensity
+            self.init_pos_y = self.pos_y
+            self.init_vel_y = self.vel_y
+            # Give flap effect
+            self.status = 'idle'
+            self.image = self.images[self.status]
 
-        #Rotation
-        self.rotation = self.initial_rotation
+            #Rotation
+            self.rotation = self.initial_rotation
 
     def update(self, dt):
         self.update_status()
@@ -151,7 +169,6 @@ class Flappy:
     def play(self, dt):
         # integrate all methods
         self.update(dt)
-        self.start_moving() #TODO After pressing a key
         self.move(dt)
         self.draw()
 
@@ -159,3 +176,10 @@ class Flappy:
         if keys[pygame.K_SPACE]:
             self.start_jumping()
             self.ignore_timer.restart()
+        if keys[pygame.K_ESCAPE]:
+            self.die()
+
+    def die(self):
+        self.is_alive = False
+        self.stop_moving()
+        self.rotation = -90

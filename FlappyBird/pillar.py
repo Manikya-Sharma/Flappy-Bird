@@ -36,7 +36,7 @@ class Pillar:
         self.offset_x = flappy_bound.offset_x
 
         # Pillar Heights
-        self.pillar_gap = 120
+        self.pillar_gap = 140
         screen_height = self.screen.get_size()[1]
         rand_height = random()*screen_height
         while not (rand_height >= (self.pillar_gap+10) and
@@ -69,6 +69,18 @@ class Pillar:
         self.update()
         self.draw()
 
+    def is_collision(self):
+        if (self.flappy_bound.pos_x+self.flappy_bound.image.get_width() >= self.pos_x \
+            and self.flappy_bound.pos_x <= self.pos_x+self.width):
+            if (self.flappy_bound.pos_y >= self.gap_y \
+                and \
+    self.flappy_bound.pos_y+self.flappy_bound.image.get_height() <= self.gap_y+self.pillar_gap):
+                return False
+            else:
+                return True
+        else:
+            return False
+
     @classmethod
     def update_pillars_creation(cls, flappy, pillars_gap, screen_width):
         first_pillar = cls.pillars_list[0]
@@ -79,3 +91,11 @@ class Pillar:
 
         if final_pillar.pos_x - final_pillar.offset_x <= pillars_gap:
             Pillar(flappy, init_x = screen_width+final_pillar.offset_x)
+
+    @classmethod
+    def check_collisions(cls):
+        for pillar in cls.pillars_list:
+            has_collided = pillar.is_collision()
+            if has_collided:
+                return True
+        return False

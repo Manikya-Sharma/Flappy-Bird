@@ -39,9 +39,11 @@ class Level:
         bg_img_2 = self.image_provider.get_bg_images()[self.data["TIME"]]
         self.handle_bg = Bg_Images(bg_img_1, bg_img_2, 0, self.screen.get_size()[0],
          self.flappy)
-
         # Pillars
         Pillar(self.flappy)
+
+        # Start Game TODO only after play button
+        self.flappy.start_moving()
 
     def blit(self):
         # back ground
@@ -49,14 +51,17 @@ class Level:
 
     def update(self):
         Pillar.update_pillars_creation\
-            (self.flappy, self.screen.get_size()[0]*(1/4), self.screen.get_size()[0])
+            (self.flappy, self.screen.get_size()[0]*(1/5), self.screen.get_size()[0])
+        if Pillar.check_collisions():
+            self.flappy.die()
 
     def play(self, dt):
         self.update()
         self.blit()
-        self.flappy.play(dt)
         for pillar in Pillar.pillars_list:
             pillar.play()
-        self.handle_bg.move(dt)
+        self.flappy.play(dt)
+        if self.flappy.is_alive:
+            self.handle_bg.move(dt)
         # print(self.flappy.pos_x, self.flappy.pos_y)
         return True   # End by returning false
