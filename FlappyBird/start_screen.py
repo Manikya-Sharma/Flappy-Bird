@@ -1,6 +1,7 @@
 import pygame
 from settings import Settings
 
+
 class Start:
     def __init__(self):
         self.screen = pygame.display.get_surface()

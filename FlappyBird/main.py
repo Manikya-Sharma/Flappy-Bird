@@ -1,23 +1,5 @@
 import pygame
 from settings import Settings
-
-# Making up settings
-try:
-    file = open('../data/data.txt', 'r+')
-except FileNotFoundError:
-    file = open('../data/data.txt', 'w+')
-    file.write('0')
-    file.seek(0)
-
-data = file.read()
-if data.strip() == '0':  # This is first time game was opened
-    file.seek(0)
-    file.write('1')
-    Settings.make_default_settings()
-
-file.close()
-
-
 from start_screen import Start
 from level import Level
 
@@ -63,6 +45,7 @@ class Game:
                 #     if event.key == pygame.K_ESCAPE:
                 #         self.end_game()
             pygame.display.update()
+
 
 if __name__ == "__main__":
     game = Game()

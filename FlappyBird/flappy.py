@@ -3,6 +3,7 @@ from timer import Timer
 from settings import Settings
 from images import Images
 
+
 class Defaults:
     def __init__(self):
         self.data = Settings().get_settings()
@@ -31,14 +32,16 @@ class Defaults:
     def get_rotation_speed(self):
         return float(self.rotation_speed)
 
+
 class Flappy:
     d = Defaults()
-    def __init__(self, pos_x, pos_y, color=d.get_color(), x_speed = d.get_speed(),
-                 initially_moving = False, inhibit_jump = True,
-                 gravity = d.get_gravity(),
-                 initial_rotation = d.get_rotation(),
-                 rotation_speed = d.get_rotation_speed(),
-                 init_status="idle", init_vel_y = 0):
+
+    def __init__(self, pos_x, pos_y, color=d.get_color(), x_speed=d.get_speed(),
+                 initially_moving=False, inhibit_jump=True,
+                 gravity=d.get_gravity(),
+                 initial_rotation=d.get_rotation(),
+                 rotation_speed=d.get_rotation_speed(),
+                 init_status="idle", init_vel_y=0):
 
         self.is_alive = True
 
@@ -73,10 +76,10 @@ class Flappy:
         self.init_vel_y = init_vel_y
         self.jump_intensity = -Defaults().get_jump_intensity()
 
-        self.ignore_timer = Timer() # To prevent excess jump
+        self.ignore_timer = Timer()  # To prevent excess jump
 
         # Rotation
-        self.initial_rotation =initial_rotation
+        self.initial_rotation = initial_rotation
         self.rotation = self.initial_rotation
         self.rotation_speed = rotation_speed
 
@@ -88,7 +91,6 @@ class Flappy:
         # Default position x of bird = width/3
         # Bird draws on offset but position on pos_x
         self.offset_x = self.pos_x - self.screen.get_size()[0]/3
-
 
     def draw(self):
         self.screen.blit(self.image, (self.pos_x - self.offset_x, self.pos_y))
@@ -109,16 +111,17 @@ class Flappy:
         if self.pos_y+self.image.get_height() >= pygame.display.get_window_size()[1]:
             self.gravity = 0
             self.vel_y = 0
-            self.pos_y = pygame.display.get_window_size()[1]-self.image.get_height()
+            self.pos_y = pygame.display.get_window_size()[
+                1]-self.image.get_height()
             self.init_pos_y = self.pos_y
             self.die()
             return
 
         jump_time = self.jump_timer.time_elapsed()
         self.pos_y = \
-        self.init_pos_y + self.init_vel_y*jump_time+(1/2)*(self.gravity)*(jump_time**2)
+            self.init_pos_y + self.init_vel_y*jump_time + \
+            (1/2)*(self.gravity)*(jump_time**2)
         self.vel_y = self.init_vel_y+(self.gravity*jump_time)
-
 
     def update_rotation(self, dt):
         if self.rotation >= -40:
@@ -156,7 +159,7 @@ class Flappy:
             self.status = 'idle'
             self.image = self.images[self.status]
 
-            #Rotation
+            # Rotation
             self.rotation = self.initial_rotation
 
     def update(self, dt):
