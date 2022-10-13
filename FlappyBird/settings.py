@@ -9,7 +9,8 @@ class Defaults:
             "GRAVITY" : 250,
             "JUMP_INTENSITY" : 200,
             "ROTATION" : 25,
-            "ROTATION_SPEED":45
+            "ROTATION_SPEED":45,
+            "PILLAR_COLOR":"green"
         }
 
 

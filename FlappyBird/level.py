@@ -1,5 +1,6 @@
 import pygame
 from flappy import Flappy
+from pillar import Pillar
 from images import Images
 from settings import Settings
 
@@ -39,13 +40,23 @@ class Level:
         self.handle_bg = Bg_Images(bg_img_1, bg_img_2, 0, self.screen.get_size()[0],
          self.flappy)
 
+        # Pillars
+        Pillar(self.flappy)
+
     def blit(self):
         # back ground
         self.handle_bg.draw(self.screen)
 
+    def update(self):
+        Pillar.update_pillars_creation\
+            (self.flappy, self.screen.get_size()[0]*(1/4), self.screen.get_size()[0])
+
     def play(self, dt):
+        self.update()
         self.blit()
         self.flappy.play(dt)
+        for pillar in Pillar.pillars_list:
+            pillar.play()
         self.handle_bg.move(dt)
         # print(self.flappy.pos_x, self.flappy.pos_y)
         return True   # End by returning false

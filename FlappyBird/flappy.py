@@ -82,11 +82,11 @@ class Flappy:
         # Offset
         # Default position x of bird = width/3
         # Bird draws on offset but position on pos_x
-        self.offset_x = self.screen.get_size()[0]/3
+        self.offset_x = self.pos_x - self.screen.get_size()[0]/3
 
 
     def draw(self):
-        self.screen.blit(self.image, (self.offset_x, self.pos_y))
+        self.screen.blit(self.image, (self.pos_x - self.offset_x, self.pos_y))
 
     def update_status(self):
         # up/down
@@ -117,6 +117,7 @@ class Flappy:
         # move forward
         if self.is_moving:
             self.pos_x += self.x_speed*dt
+        self.offset_x = self.pos_x - self.screen.get_size()[0]/3
 
     def change_color(self, color):
         if color.lower() in ("red", "yellow", "blue"):
