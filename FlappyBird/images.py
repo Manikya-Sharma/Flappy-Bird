@@ -80,7 +80,7 @@ class Images:
         return self.prepare_images(self.flappy_red_images)
 
     def get_ground_images(self):
-        return self.prepare_images(self.ground_image)
+        return self.prepare_images(self.ground_images, ground = True)
 
     def get_number_images(self):
         return self.prepare_images(self.number_images)
@@ -91,12 +91,15 @@ class Images:
     def get_ui_images(self):
         return self.prepare_images(self.ui_images)
 
-    def prepare_images(self, dic, bg_image=False):
+    def prepare_images(self, dic, bg_image=False, ground = False):
         new_dic = {}
         for key, val in dic.items():
             if bg_image:
                 new_val = pygame.transform.scale(
                     val, (int(self.data["SCREEN_WIDTH"]), int(self.data["SCREEN_HEIGHT"])))
+            elif ground:
+                new_val = pygame.transform.scale(
+                    val, (int(self.data["SCREEN_WIDTH"]), val.get_height()*2))
             else:
                 new_val = pygame.transform.scale2x(val)
             new_val.set_colorkey((0, 0, 0))

@@ -13,7 +13,7 @@ class Bg_Images:
         self.screen_width = screen_width
         self.pos_x_2 = self.pos_x_1+self.img_1.get_width()
         self.flappy_bound = flappy_bound
-        self.speed = self.flappy_bound.x_speed
+        self.speed = self.flappy_bound.x_speed/2
 
     def draw(self, screen):
         screen.blit(self.img_1, (self.pos_x_1, 0))
@@ -27,6 +27,27 @@ class Bg_Images:
         self.pos_x_1 -= self.speed*dt
         self.pos_x_2 -= self.speed*dt
 
+class Ground_Images:
+    def __init__(self, img_1, img_2, pos_x_1, screen_width, flappy_bound):
+        self.img_1 = img_1
+        self.img_2 = img_2
+        self.pos_x_1 = pos_x_1
+        self.screen_width = screen_width
+        self.pos_x_2 = self.pos_x_1+self.img_1.get_width()
+        self.flappy_bound = flappy_bound
+        self.speed = self.flappy_bound.x_speed
+
+    def draw(self, screen):
+        screen.blit(self.img_1, (self.pos_x_1, screen.get_size()[1]-self.img_1.get_height()))
+        screen.blit(self.img_2, (self.pos_x_2,  screen.get_size()[1]-self.img_1.get_height()))
+
+    def move(self, dt):
+        if self.pos_x_1+self.img_1.get_width() < 0:
+            self.pos_x_1 = self.screen_width
+        elif self.pos_x_2+self.img_1.get_width() < 0:
+            self.pos_x_2 = self.screen_width
+        self.pos_x_1 -= self.speed*dt
+        self.pos_x_2 -= self.speed*dt
 
 class Level:
     def __init__(self):
@@ -36,12 +57,17 @@ class Level:
         # Flappy
         self.flappy = Flappy(self.screen.get_size()[
                              0]*(1/10), self.screen.get_height()/2)
-        # Background image
+        # Background image & Ground
         self.image_provider = Images()
         bg_img_1 = self.image_provider.get_bg_images()[self.data["TIME"]]
         bg_img_2 = self.image_provider.get_bg_images()[self.data["TIME"]]
+        ground_img_1 = self.image_provider.get_ground_images()["ground"]
+        ground_img_2 = self.image_provider.get_ground_images()["ground"]
         self.handle_bg = Bg_Images(bg_img_1, bg_img_2, 0, self.screen.get_size()[0],
                                    self.flappy)
+        self.handle_ground = Ground_Images(ground_img_1, ground_img_2, 0,
+                                           self.screen.get_size()[0], self.flappy)
+
         # Pillars
         Pillar(self.flappy)
         # Score
@@ -54,6 +80,7 @@ class Level:
     def blit(self):
         # background
         self.handle_bg.draw(self.screen)
+        self.handle_ground.draw(self.screen)
         for letter in str(self.score):
             self.screen.blit(self.num_images.get(letter), (0, 0))
 
@@ -83,4 +110,5 @@ class Level:
         self.flappy.play(dt)
         if self.flappy.is_alive:
             self.handle_bg.move(dt)
+            self.handle_ground.move(dt)
         return True   # End by returning false

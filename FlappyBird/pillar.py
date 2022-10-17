@@ -1,7 +1,7 @@
 import pygame
 from settings import Settings
 from images import Images
-from random import random
+from random import randint
 
 
 class Defaults:
@@ -28,6 +28,8 @@ class Pillar:
         self.images = Images().get_pillar_images()
         self.image = self.images[color]
         self.width = self.image.get_width()
+        self.ground_image = Images().get_ground_images()["ground"]
+        self.ground_height =self.ground_image.get_height()
 
         # Initial position
         if init_x is None:
@@ -43,14 +45,11 @@ class Pillar:
         # Pillar Heights
         self.pillar_gap = 140
         screen_height = self.screen.get_size()[1]
-        rand_height = random()*screen_height
-        while not (rand_height >= (self.pillar_gap+10) and
-                   rand_height <= screen_height-(self.pillar_gap+10)):
-            rand_height = random()*screen_height
+        rand_height = randint(20, screen_height-self.ground_height-self.pillar_gap-20)
         self.gap_y = rand_height
 
         self.pillar_height_1 = self.gap_y
-        self.pillar_height_2 = screen_height-self.gap_y+self.pillar_gap
+        self.pillar_height_2 = screen_height - self.ground_height -self.gap_y - self.pillar_gap
 
         self.pos_1_y = 0
         self.pos_2_y = self.gap_y+self.pillar_gap

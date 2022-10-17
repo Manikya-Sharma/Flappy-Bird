@@ -58,6 +58,7 @@ class Flappy:
             self.images = self.blue_image
 
         self.screen = pygame.display.get_surface()
+        self.ground_height = Images().get_ground_images()["ground"].get_height()
 
         # Position
         self.pos_x = pos_x
@@ -108,11 +109,11 @@ class Flappy:
 
     def update_fall(self, dt):
         # Die
-        if self.pos_y+self.image.get_height() >= pygame.display.get_window_size()[1]:
+        if self.pos_y+self.image.get_height() >= pygame.display.get_window_size()[1]-self.ground_height:
             self.gravity = 0
             self.vel_y = 0
             self.pos_y = pygame.display.get_window_size()[
-                1]-self.image.get_height()
+                1]-self.image.get_height()-self.ground_height
             self.init_pos_y = self.pos_y
             self.die()
             return
