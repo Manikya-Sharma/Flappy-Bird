@@ -77,12 +77,19 @@ class Level:
         # Start Game TODO only after play button
         self.flappy.start_moving()
 
+    def blit_score(self):
+        for ind, letter in enumerate(str(self.score)):
+            x_pos = 0
+            for i in range(len(str(self.score)[0:ind])):
+                x_pos += self.num_images.get(str(self.score)[i]).get_width()
+            self.screen.blit(self.num_images.get(letter), (x_pos, 0))
+
     def blit(self):
         # background
         self.handle_bg.draw(self.screen)
         self.handle_ground.draw(self.screen)
-        for letter in str(self.score):
-            self.screen.blit(self.num_images.get(letter), (0, 0))
+        self.blit_score()
+
 
     def update_score(self):
         i = 0
@@ -111,4 +118,8 @@ class Level:
         if self.flappy.is_alive:
             self.handle_bg.move(dt)
             self.handle_ground.move(dt)
-        return True   # End by returning false
+
+        if self.flappy.is_dead():
+            return False
+        else:
+            return True   # End by returning false

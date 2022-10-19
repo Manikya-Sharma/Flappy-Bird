@@ -186,3 +186,10 @@ class Flappy:
         self.is_alive = False
         self.stop_moving()
         self.rotation = -90
+
+    def is_dead(self):
+        if ((self.is_alive == False and self.pos_y + self.image.get_height())
+         >= (self.screen.get_size()[1]-self.ground_height)):
+            return True
+        else:
+            return False
