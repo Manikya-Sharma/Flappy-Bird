@@ -63,5 +63,11 @@ if data.strip() == '0':  # This is first time game was opened
     file.seek(0)
     file.write('1')
     Settings.make_default_settings()
+file.close()
 
+try:
+    file = open('../data/stats.txt', 'r')
+except FileNotFoundError:
+    file = open('../data/stats.txt', 'w') # To initialize statistics
+    file.close()
 file.close()

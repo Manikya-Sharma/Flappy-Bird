@@ -93,6 +93,12 @@ class Flappy:
         # Bird draws on offset but position on pos_x
         self.offset_x = self.pos_x - self.screen.get_size()[0]/3
 
+    def disable_gravity(self):
+        self.gravity = 0
+
+    def enable_gravity(self):
+        self.gravity= Flappy.d.get_gravity()
+
     def draw(self):
         self.screen.blit(self.image, (self.pos_x - self.offset_x, self.pos_y))
 

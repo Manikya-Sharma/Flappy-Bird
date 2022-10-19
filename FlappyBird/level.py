@@ -75,7 +75,15 @@ class Level:
         self.num_images = self.image_provider.get_number_images()
 
         # Start Game TODO only after play button
+        # self.flappy.start_moving()
+        self.flappy.inhibit_jump = True
+        self.flappy.disable_gravity()
+
+    def initialize(self):
         self.flappy.start_moving()
+        self.flappy.inhibit_jump = False
+        self.flappy.enable_gravity()
+        self.flappy.jump_timer.restart()
 
     def blit_score(self):
         for ind, letter in enumerate(str(self.score)):
@@ -120,6 +128,6 @@ class Level:
             self.handle_ground.move(dt)
 
         if self.flappy.is_dead():
-            return False
+            return False, self.score
         else:
-            return True   # End by returning false
+            return True, self.score   # End by returning false

@@ -22,10 +22,17 @@ class Game:
         # Variables
         self.before_begin = True
         self.running = True
+        self.final_score = 0
         self.start = Start()
         self.level = Level()
 
     def end_game(self):
+        stat_file = open('../data/stats.txt', 'r+')
+        data = stat_file.read()
+        data = data +  str(self.final_score) + ","
+        stat_file.seek(0)
+        stat_file.write(data)
+        stat_file.close()
         self.running = False
 
     def play(self):
@@ -34,8 +41,10 @@ class Game:
             dt = self.clock.tick()/1000
             if self.before_begin:
                 self.before_begin = self.start.play()
+                if not self.before_begin:
+                    self.level.initialize()
             else:
-                self.running = self.level.play(dt)
+                self.running, self.final_score = self.level.play(dt)
 
             # Close Button
             for event in pygame.event.get():
