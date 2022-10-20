@@ -113,7 +113,7 @@ class Flappy:
 
         self.image = self.images[self.status]
 
-    def update_fall(self, dt):
+    def update_fall(self):
         # Die
         if self.pos_y+self.image.get_height() >= pygame.display.get_window_size()[1]-self.ground_height:
             self.gravity = 0
@@ -172,7 +172,7 @@ class Flappy:
     def update(self, dt):
         self.update_status()
         self.update_image_rotation()
-        self.update_fall(dt)
+        self.update_fall()
         self.update_rotation(dt)
 
     def play(self, dt):
