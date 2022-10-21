@@ -1,11 +1,14 @@
 import pygame
 from settings import Settings
+from settings_screen import Settings_Screen
 from images import Images
 
 
 class Start:
     def __init__(self):
         self.keep_running = True
+        self.run_settings = False
+        self.settings_screen = Settings_Screen()
         self.screen = pygame.display.get_surface()
 
         # Data
@@ -37,13 +40,10 @@ class Start:
         self.font_size = 20
         self.padding = 40
 
-        # Sudoku Font
+        # Flappy Font
         self.flappy_font = "freesansbold.ttf"
         self.flappy_font_size = 60
 
-        # Settings Screen
-        # self.settings_screen = SettingsScreen(self.screen)
-        self.open_settings = False
 
 
     def draw(self):
@@ -106,22 +106,19 @@ class Start:
             return "SETTINGS"
 
     def play(self):
+        if self.run_settings:
+            self.run_settings = self.settings_screen.run()
+            return True  # Never end
+
         self.draw()
-        # return self.keep_running
-
-        if not self.open_settings:
-            self.draw()
-            if pygame.mouse.get_pressed()[0]:
-                clicked = self.detect_click(pygame.mouse.get_pos())
-            else:
-                clicked = False
-
-            if clicked == "START":
-                return False
-            elif clicked == "SETTINGS":
-                self.open_settings = True
-                return True
+        if pygame.mouse.get_pressed()[0]:
+            clicked = self.detect_click(pygame.mouse.get_pos())
         else:
-            initialize, self.open_settings = self.settings_screen.play()
-            return initialize
+            clicked = False
+
+        if clicked == "START":
+            return False
+        elif clicked == "SETTINGS":
+            self.run_settings = True
+            return True
         return True

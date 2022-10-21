@@ -59,7 +59,7 @@ class Game:
             self.medal = "bronze"
 
         if self.final_score == 0:
-            self.medal = None 
+            self.medal = None
 
     def end_game(self):
         self.ending = True
@@ -93,7 +93,10 @@ class Game:
                 #         self.end.play()
             pygame.display.update()
             if not self.running:
-                self.end_game() # To add statistics
+                if not self.start.run_settings:
+                    self.end_game() # To add statistics
+                else: # Dont show scorecard
+                    self.ending = False
 
 
         while self.ending:
