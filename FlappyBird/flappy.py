@@ -58,7 +58,8 @@ class Flappy:
             self.images = self.blue_image
 
         self.screen = pygame.display.get_surface()
-        self.ground_height = Images().get_ground_images()["ground"].get_height()
+        self.ground_height = Images().get_ground_images()[
+            "ground"].get_height()
 
         # Position
         self.pos_x = pos_x
@@ -90,14 +91,14 @@ class Flappy:
 
         # Offset
         # Default position x of bird = width/3
-        # Bird draws on offset but position on pos_x
+        # Bird draws on offset but actual position on pos_x
         self.offset_x = self.pos_x - self.screen.get_size()[0]/3
 
     def disable_gravity(self):
         self.gravity = 0
 
     def enable_gravity(self):
-        self.gravity= Flappy.d.get_gravity()
+        self.gravity = Flappy.d.get_gravity()
 
     def draw(self):
         self.screen.blit(self.image, (self.pos_x - self.offset_x, self.pos_y))
@@ -162,6 +163,7 @@ class Flappy:
             self.vel_y = self.jump_intensity
             self.init_pos_y = self.pos_y
             self.init_vel_y = self.vel_y
+
             # Give flap effect
             self.status = 'idle'
             self.image = self.images[self.status]
@@ -195,7 +197,7 @@ class Flappy:
 
     def is_dead(self):
         if ((self.is_alive == False and self.pos_y + self.image.get_height())
-         >= (self.screen.get_size()[1]-self.ground_height)):
+                >= (self.screen.get_size()[1]-self.ground_height)):
             return True
         else:
             return False

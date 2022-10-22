@@ -25,7 +25,7 @@ class Start:
                 self.max_score = 0
             else:
                 lis = data.split(',')
-                lis.pop(len(lis)-1) # To remove blank
+                lis.pop(len(lis)-1)  # To remove blank
                 for ind, score in enumerate(lis):
                     if not score.isdigit():
                         continue
@@ -44,23 +44,21 @@ class Start:
         self.flappy_font = "freesansbold.ttf"
         self.flappy_font_size = 60
 
-
-
     def draw(self):
         width, height = self.screen.get_size()
         # Background
-        self.screen.blit(self.bg_image, (0,0))
+        self.screen.blit(self.bg_image, (0, 0))
         self.screen.blit(self.ground_image,
-        (0, height-self.ground_image.get_height()))
+                         (0, height-self.ground_image.get_height()))
 
         # Flappy Bird Text
         flappy_font = pygame.font.Font(self.flappy_font, self.flappy_font_size)
-        flappy_text = flappy_font.render("Flappy Bird", True, (0,0,0))
+        flappy_text = flappy_font.render("Flappy Bird", True, (0, 0, 0))
         self.screen.blit(flappy_text,
                          (width/2-flappy_text.get_width()/2, 100))
 
         # Start Button
-        pygame.draw.rect(self.screen, (255,255,255),
+        pygame.draw.rect(self.screen, (255, 255, 255),
                          [width/2-self.start_button_width/2,
                           height/2 -
                           self.start_button_height/2,
@@ -68,13 +66,13 @@ class Start:
 
         # Start Text
         start_font = pygame.font.Font(self.font, self.font_size)
-        start_text = start_font.render("START", True, (0,0,0))
+        start_text = start_font.render("START", True, (0, 0, 0))
         self.screen.blit(start_text,
                          (width/2-start_text.get_width()/2,
                           height/2-start_text.get_height()/2))
 
         # Settings Button
-        pygame.draw.rect(self.screen, (255,255,255),
+        pygame.draw.rect(self.screen, (255, 255, 255),
                          [width/2-self.start_button_width/2,
                           height/2 +
                           self.start_button_height/2+self.padding,
@@ -82,11 +80,11 @@ class Start:
 
         # Settings Text
         start_font = pygame.font.Font(self.font, self.font_size)
-        start_text = start_font.render("SETTINGS", True, (0,0,0))
+        start_text = start_font.render("SETTINGS", True, (0, 0, 0))
         self.screen.blit(start_text,
                          (width/2-start_text.get_width()/2,
-                          height/2+self.start_button_height/2\
-                            +self.padding+start_text.get_height()/2))
+                          height/2+self.start_button_height/2
+                          + self.padding+start_text.get_height()/2))
 
     def detect_click(self, position):
         width, height = self.screen.get_size()
@@ -99,10 +97,10 @@ class Start:
 
         if (pos_x >= width/2 - self.start_button_width/2)\
             and (pos_x <= width/2 + self.start_button_width/2)\
-                and (pos_y >= height/2+self.start_button_height/2\
-                    + self.padding)\
+                and (pos_y >= height/2+self.start_button_height/2
+                     + self.padding)\
         and (pos_y <= height/2+self.start_button_height/2\
-            +self.padding+self.start_button_height):
+                 + self.padding+self.start_button_height):
             return "SETTINGS"
 
     def play(self):

@@ -80,7 +80,7 @@ class Images:
         return self.prepare_images(self.flappy_red_images)
 
     def get_ground_images(self):
-        return self.prepare_images(self.ground_images, ground = True)
+        return self.prepare_images(self.ground_images, ground=True)
 
     def get_number_images(self):
         return self.prepare_images(self.number_images)
@@ -91,7 +91,7 @@ class Images:
     def get_ui_images(self):
         return self.prepare_images(self.ui_images)
 
-    def prepare_images(self, dic, bg_image=False, ground = False):
+    def prepare_images(self, dic, bg_image=False, ground=False):
         new_dic = {}
         for key, val in dic.items():
             if bg_image:

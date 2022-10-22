@@ -13,7 +13,6 @@ class Game:
         self.clock = pygame.time.Clock()
 
         # Settings
-        # TODO Add make defaults in settings panel of initialize screen
         self.data = Settings.get_settings()
 
         # Screen
@@ -68,7 +67,7 @@ class Game:
         # Add the data to statistics
         stat_file = open('../data/stats.txt', 'r+')
         data = stat_file.read()
-        data = data +  str(self.final_score) + ","
+        data = data + str(self.final_score) + ","
         stat_file.seek(0)
         stat_file.write(data)
         stat_file.close()
@@ -88,19 +87,16 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.end_game()
-                # if event.type == pygame.KEYDOWN:
-                #     if event.key == pygame.K_ESCAPE:
-                #         self.end.play()
             pygame.display.update()
             if not self.running:
                 if not self.start.run_settings:
-                    self.end_game() # To add statistics
-                else: # Dont show scorecard
+                    self.end_game()  # To add statistics
+                else:  # Dont show scorecard
                     self.ending = False
 
-
         while self.ending:
-            self.ending = self.end.play(self.final_score, self.max_score, self.medal)
+            self.ending = self.end.play(
+                self.final_score, self.max_score, self.medal)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -108,6 +104,7 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.ending = False
+
 
 if __name__ == "__main__":
     game = Game()

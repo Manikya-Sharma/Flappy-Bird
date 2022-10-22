@@ -27,6 +27,7 @@ class Bg_Images:
         self.pos_x_1 -= self.speed*dt
         self.pos_x_2 -= self.speed*dt
 
+
 class Ground_Images:
     def __init__(self, img_1, img_2, pos_x_1, screen_width, flappy_bound):
         self.img_1 = img_1
@@ -38,8 +39,10 @@ class Ground_Images:
         self.speed = self.flappy_bound.x_speed
 
     def draw(self, screen):
-        screen.blit(self.img_1, (self.pos_x_1, screen.get_size()[1]-self.img_1.get_height()))
-        screen.blit(self.img_2, (self.pos_x_2,  screen.get_size()[1]-self.img_1.get_height()))
+        screen.blit(self.img_1, (self.pos_x_1, screen.get_size()
+                    [1]-self.img_1.get_height()))
+        screen.blit(self.img_2, (self.pos_x_2,  screen.get_size()
+                    [1]-self.img_1.get_height()))
 
     def move(self, dt):
         if self.pos_x_1+self.img_1.get_width() < 0:
@@ -48,6 +51,7 @@ class Ground_Images:
             self.pos_x_2 = self.screen_width
         self.pos_x_1 -= self.speed*dt
         self.pos_x_2 -= self.speed*dt
+
 
 class Level:
     def __init__(self):
@@ -74,8 +78,6 @@ class Level:
         self.score = 0
         self.num_images = self.image_provider.get_number_images()
 
-        # Start Game TODO only after play button
-        # self.flappy.start_moving()
         self.flappy.inhibit_jump = True
         self.flappy.disable_gravity()
 
@@ -97,7 +99,6 @@ class Level:
         self.handle_bg.draw(self.screen)
         self.handle_ground.draw(self.screen)
         self.blit_score()
-
 
     def update_score(self):
         i = 0

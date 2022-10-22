@@ -50,7 +50,7 @@ class Settings:
             f.write(string)
 
 
-# Making up settings
+# Making up settings in case non existing
 try:
     file = open('../data/data.txt', 'r+')
 except FileNotFoundError:
@@ -68,6 +68,6 @@ file.close()
 try:
     file = open('../data/stats.txt', 'r')
 except FileNotFoundError:
-    file = open('../data/stats.txt', 'w') # To initialize statistics
+    file = open('../data/stats.txt', 'w')  # To initialize statistics
     file.close()
 file.close()
